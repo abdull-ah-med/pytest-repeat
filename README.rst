@@ -88,6 +88,24 @@ For example:
 This will attempt to run test_file.py 1000 times, but will stop as soon as a failure
 occurs.
 
+Large repeat counts and pytest caching
+--------------------------------------
+
+Pytest caches the node ID of each repeated test in
+``.pytest_cache/v/cache/nodeids``. Large repeat counts can therefore grow this
+file substantially, and loading or saving it can slow later test runs even
+when those runs do not repeat tests.
+
+For a large repetition run that does not need pytest caching, disable the
+cache provider::
+
+  $ pytest --count=1000 -p no:cacheprovider test_file.py
+
+This disables all features supplied by pytest's cache provider, including
+``--last-failed`` and ``--failed-first``. It does not remove an existing cache.
+To clear previously accumulated cache entries, use ``pytest --cache-clear``
+on a subsequent run with the cache provider enabled.
+
 UnitTest Style Tests
 --------------------
 
